@@ -1,10 +1,16 @@
 <template>
   <div>
     <button @click="loginWithLine">Login with LINE</button>
+    <div>
+      <NuxtLink to="about">go to about</NuxtLink>
+    </div>
   </div>
 </template>
 
 <script setup>
+definePageMeta({
+  // middleware: ["set-csrf"],
+});
 const loginWithLine = () => {
   const state = "RANDOM_STRING"; // CSRF対策のために本来はランダムな文字列にする
 
