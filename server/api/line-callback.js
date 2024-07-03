@@ -1,10 +1,14 @@
+import { setCookie, getCookie } from "h3";
+
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const { clientSecret } = config;
   const { clientId, redirectUri } = config.public;
   const { code, state } = getQuery(event);
 
-  if (state !== "RANDOM_STRING") {
+  const csrfToken = getCookie(event, "csrf_token");
+  console.log("csrftoken:", csrfToken);
+  if (state !== csrfToken) {
     throw createError({ statusCode: 401, message: "Invalid state" });
   }
 
@@ -38,7 +42,7 @@ export default defineEventHandler(async (event) => {
 
     setCookie(event, "profile", JSON.stringify(profileResponse), {
       httpOnly: true,
-      sameSite: true,
+      sameSite: "Lax", // "Strictだと/profileにリダイレクトした際に呼ばれるapi/profileへのリクエストにprofileのクッキーが含まれない
       secure: process.env.NODE_ENV === "production",
       path: "/",
     });

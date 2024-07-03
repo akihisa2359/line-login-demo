@@ -1,4 +1,3 @@
-// import { randomUUID } from "crypto";
 import { setCookie, getCookie } from "h3";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
@@ -6,8 +5,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   const event = useRequestEvent();
   const { randomUUID } = await import("crypto");
-  console.log("middleware");
-  console.log(randomUUID());
 
   let csrfToken = getCookie(event, "csrf_token");
   console.log(csrfToken);
@@ -15,7 +12,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     csrfToken = randomUUID();
     setCookie(event, "csrf_token", csrfToken, {
       httpOnly: true,
-      sameSite: "Strict",
+      sameSite: "Lax", // StringだとLINE認証ページからline-callbackにリダイレクトする際にcookieが送信されない
       secure: process.env.NODE_ENV === "production",
       path: "/",
     });
