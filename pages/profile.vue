@@ -13,6 +13,10 @@
 import { useFetch } from "#app";
 import { useState } from "#app";
 
+definePageMeta({
+  middleware: "auth",
+});
+
 const profile = useState("profile", () => null);
 
 const { data, error } = await useFetch("/api/profile");
