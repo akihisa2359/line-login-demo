@@ -1,15 +1,17 @@
 import { getCookie } from "h3";
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   if (import.meta.client) return;
 
+  // serverの値を参照できない
+  // const { sessionStore } = require("server/sessionStore");
+  const hoge = await $fetch("/api/check-session");
   const event = useRequestEvent();
 
-  const profile = getCookie(event, "profile");
-  console.log(profile);
+  // const sessionId = getCookie(event, "session_id");
+  // if (sessionId && sessionStore.has(sessionId)) {
+  //   return;
+  // }
 
-  if (!profile) {
-    // return abortNavigation();
-    return navigateTo("/");
-  }
+  // return navigateTo("/");
 });

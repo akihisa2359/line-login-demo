@@ -1,8 +1,10 @@
 <template>
   <div v-if="profile">
-    <h1>{{ profile.displayName }}</h1>
-    <img :src="profile.pictureUrl" alt="Profile Picture" />
-    <p>{{ profile.statusMessage }}</p>
+    <p>ようこそ</p>
+    <p>{{ profile.user.displayName }} さん</p>
+    <div>
+      <button @click="logout">ログアウト</button>
+    </div>
   </div>
   <div v-else>
     <p>Loading...</p>
@@ -10,11 +12,8 @@
 </template>
 
 <script setup>
-import { useFetch } from "#app";
-import { useState } from "#app";
-
 definePageMeta({
-  middleware: "auth",
+  // middleware: "auth",
 });
 
 const profile = useState("profile", () => null);
@@ -25,4 +24,15 @@ if (data.value) {
 } else {
   console.error(error.value);
 }
+
+const logout = async () => {
+  try {
+    const res = await $fetch("/api/logout", {
+      method: "POST",
+    });
+    navigateTo("/");
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>

@@ -1,4 +1,6 @@
 import { setCookie, getCookie } from "h3";
+import { randomUUID } from "crypto";
+import sessionStore from "../sessionStore";
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
@@ -7,7 +9,6 @@ export default defineEventHandler(async (event) => {
   const { code, state } = getQuery(event);
 
   const csrfToken = getCookie(event, "csrf_token");
-  console.log("csrftoken:", csrfToken);
   if (state !== csrfToken) {
     throw createError({ statusCode: 401, message: "Invalid state" });
   }
@@ -40,9 +41,11 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-    setCookie(event, "profile", JSON.stringify(profileResponse), {
+    const uuid = randomUUID();
+    sessionStore.set(uuid, profileResponse);
+    setCookie(event, "session_id", uuid, {
       httpOnly: true,
-      sameSite: "Lax", // "Strictだと/profileにリダイレクトした際に呼ばれるapi/profileへのリクエストにprofileのクッキーが含まれない
+      sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
       path: "/",
     });

@@ -1,9 +1,10 @@
 <template>
   <div>
-    <button @click="loginWithLine">Login with LINE</button>
-    <div>
-      <NuxtLink to="about">go to about</NuxtLink>
-    </div>
+    <img
+      src="/public/btn_login_base.png"
+      @click="loginWithLine"
+      class="line-login-btn"
+    />
   </div>
 </template>
 
@@ -12,3 +13,15 @@ const loginWithLine = async () => {
   window.location.href = "/api/redirect-to-line";
 };
 </script>
+
+<style scoped>
+.line-login-btn {
+  cursor: pointer;
+  &:hover {
+    filter: brightness(0.9);
+  }
+  &:active {
+    filter: brightness(0.7);
+  }
+}
+</style>
