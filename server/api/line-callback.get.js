@@ -1,4 +1,4 @@
-import { setCookie, getCookie } from "h3";
+import { setCookie, getCookie, deleteCookie } from "h3";
 import { randomUUID } from "crypto";
 import sessionStore from "../sessionStore";
 
@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
   if (state !== csrfToken) {
     throw createError({ statusCode: 401, message: "Invalid state" });
   }
+  deleteCookie(event, "csrf_token");
 
   try {
     const body = {
@@ -32,7 +33,6 @@ export default defineEventHandler(async (event) => {
       }
     );
 
-    console.log(tokenResponse);
     const accessToken = tokenResponse.access_token;
 
     const profileResponse = await $fetch("https://api.line.me/v2/profile", {

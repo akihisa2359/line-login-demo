@@ -5,9 +5,5 @@ export default defineEventHandler((event) => {
   const sessionId = getCookie(event, "session_id");
   const user = sessionStore.get(sessionId);
 
-  if (user) {
-    return { user };
-  }
-
-  return { statusCode: 401, body: "Unauthorized" };
+  return user ? { user } : { user: null };
 });
