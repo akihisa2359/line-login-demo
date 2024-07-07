@@ -21,25 +21,16 @@ definePageMeta({
 
 const { me, logout } = useAuth();
 
-// const { data: profile, error } = await useFetch("/api/profile");
-
-// if (error.value) {
-//   console.log(error.value);
-//   if (error.value.statusCode === 401) {
-//     window.alert("Unauthorized");
-//   }
-//   navigateTo("/");
-// }
-
 const clickLogout = async () => {
   try {
     const res = await $fetch("/api/logout", {
       method: "POST",
     });
     logout();
-    navigateTo("/");
   } catch (error) {
     console.log(error);
+  } finally {
+    navigateTo("/");
   }
 };
 </script>
